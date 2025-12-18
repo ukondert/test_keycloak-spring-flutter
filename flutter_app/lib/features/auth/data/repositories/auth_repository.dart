@@ -93,8 +93,9 @@ class AuthRepository {
 
       final user = UserDTO.fromJson(response.data as Map<String, dynamic>);
 
-      // Cache user data
-      await _storage.write(AppConfig.userDataKey, response.data.toString());
+      // Cache only essential user identifier for offline access
+      // Full user data is fetched from backend when needed
+      await _storage.write(AppConfig.userDataKey, user.id);
 
       return user;
     } catch (e) {
