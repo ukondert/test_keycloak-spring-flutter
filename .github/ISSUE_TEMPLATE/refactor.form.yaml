@@ -1,0 +1,295 @@
+name: Refactoring
+description: Code-Verbesserung ohne Funktionsänderung (Architektur, Performance, Wartbarkeit)
+title: "[REFACTOR] "
+labels: ["refactoring", "technical-debt"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Refactoring
+        Code-Verbesserung zur Reduzierung von Technical Debt oder Verbesserung der Architektur.
+
+  - type: textarea
+    id: refactoring-goal
+    attributes:
+      label: Refactoring-Ziel
+      description: Was soll verbessert werden und warum?
+      placeholder: |
+        **Was:** Fahrt-Aggregate in kleinere Aggregates aufteilen
+        **Warum:** Bessere Performance, klare Aggregate-Grenzen gemäß DDD
+    validations:
+      required: true
+
+  - type: input
+    id: bounded-context
+    attributes:
+      label: Bounded Context (DDD)
+      description: Betroffener Bounded Context
+      placeholder: "z.B. Fahrtenmanagement, Benutzerverwaltung"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: architecture-layer
+    attributes:
+      label: Hauptbetroffener Layer
+      description: Welcher Architektur-Layer ist primär betroffen?
+      options:
+        - Domain Layer
+        - Application Layer
+        - Infrastructure Layer
+        - Interface Layer
+        - Frontend
+        - Mehrere Layer (Cross-Cutting)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorität
+      description: Wie dringend ist das Refactoring?
+      options:
+        - Kritisch (blockiert andere Arbeit)
+        - Hoch (Technical Debt reduzieren)
+        - Mittel (Wartbarkeit verbessern)
+        - Niedrig (Nice-to-have)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: story-points
+    attributes:
+      label: Aufwandsschätzung
+      description: Story Points
+      options:
+        - "1"
+        - "2"
+        - "3"
+        - "5"
+        - "8"
+        - "13"
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Design-Konzepte & Architektur
+
+  - type: checkboxes
+    id: ddd-refactoring
+    attributes:
+      label: Domain-Driven Design (DDD)
+      description: DDD-spezifische Refactorings
+      options:
+        - label: Aggregate Refactoring (z.B. Aggregate aufteilen/zusammenführen)
+        - label: Ubiquitous Language Alignment (Umbenennung gemäß Fachsprache)
+        - label: Domain Event Einführung (Events publizieren)
+        - label: Value Object Extraktion (z.B. Email, PhoneNumber)
+        - label: Repository Pattern Verbesserung
+
+  - type: checkboxes
+    id: architecture-patterns
+    attributes:
+      label: Architektur-Patterns
+      description: Welche Patterns sollen angewendet/verbessert werden?
+      options:
+        - label: Hexagonal Architecture Alignment
+        - label: Event-Driven Architecture (Domain Events)
+        - label: CQRS Pattern (Command/Query Separation)
+        - label: Strangler Fig Pattern (Legacy Code ersetzen)
+
+  - type: checkboxes
+    id: api-refactoring
+    attributes:
+      label: API-Design
+      description: API-bezogene Verbesserungen
+      options:
+        - label: OpenAPI Spec Verbesserung (Konsistenz, Versionierung)
+        - label: GraphQL Schema Refactoring
+        - label: BFF Optimierung (Aggregation, Caching)
+        - label: RESTful Principles (Resource Naming, HTTP Methods)
+
+  - type: checkboxes
+    id: cdd-refactoring
+    attributes:
+      label: Component-Driven Design (Frontend)
+      description: Frontend-spezifische Refactorings
+      options:
+        - label: Component Extraktion (Wiederverwendbare Komponenten)
+        - label: Atomic Design Alignment
+        - label: Props/State Refactoring (Prop Drilling reduzieren)
+        - label: Design Token Migration
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Refactoring-Details
+
+  - type: textarea
+    id: current-state
+    attributes:
+      label: Ist-Zustand (Current State)
+      description: Beschreibung des aktuellen Zustands und Probleme
+      placeholder: |
+        ```typescript
+        // Aktueller Code
+        class Fahrt {
+          // Problem: Zu viele Verantwortlichkeiten in einem Aggregate
+          ratings: Rating[];
+          payments: Payment[];
+          route: Route;
+        }
+        ```
+        
+        **Probleme:**
+        - Zyklische Dependencies zwischen Aggregates
+        - Business Logic in Controller-Layer
+        - N+1 Query Performance-Problem
+      render: typescript
+    validations:
+      required: true
+
+  - type: textarea
+    id: target-state
+    attributes:
+      label: Soll-Zustand (Target State)
+      description: Gewünschter Zustand nach Refactoring
+      placeholder: |
+        ```typescript
+        // Neuer Code
+        class Fahrt {
+          // Fokussiert auf Kern-Fahrt-Logik
+          route: Route;
+          // Ratings und Payments in separate Aggregates
+        }
+        
+        class FahrtRating { /* separates Aggregate */ }
+        class FahrtPayment { /* separates Aggregate */ }
+        ```
+        
+        **Verbesserungen:**
+        - Klare Aggregate-Grenzen gemäß DDD
+        - Business Logic in Domain Layer
+        - Eager Loading / Caching implementiert
+      render: typescript
+    validations:
+      required: true
+
+  - type: dropdown
+    id: refactoring-strategy
+    attributes:
+      label: Refactoring-Strategie
+      description: Wie soll das Refactoring durchgeführt werden?
+      options:
+        - Strangler Fig Pattern (schrittweise ersetzen)
+        - Feature Flag (parallel laufen lassen)
+        - Big Bang (alle Änderungen auf einmal)
+        - Branch by Abstraction
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Auswirkungen
+
+  - type: dropdown
+    id: breaking-changes
+    attributes:
+      label: Breaking Changes
+      description: Führt das Refactoring zu Breaking Changes?
+      options:
+        - Keine Breaking Changes
+        - API Breaking Changes (Versionierung erforderlich)
+        - Database Migration erforderlich
+        - Konfigurationsänderungen erforderlich
+        - Mehrere Breaking Changes
+    validations:
+      required: false
+
+  - type: textarea
+    id: affected-components
+    attributes:
+      label: Betroffene Komponenten
+      description: Welche Komponenten müssen angepasst werden?
+      placeholder: |
+        - Domain Layer: Fahrt-Aggregate, RideRequest-Entity
+        - Application Layer: CreateRideUseCase, AcceptRequestUseCase
+        - Infrastructure Layer: RideRepository, EventBus
+        - Interface Layer: RideController, GraphQL Resolver
+        - Frontend: RideList Component, RequestForm
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: test-strategy
+    attributes:
+      label: Test-Strategie
+      description: Wie werden die Änderungen getestet?
+      options:
+        - label: Bestehende Tests müssen angepasst werden
+        - label: Neue Tests für neue Struktur erforderlich
+        - label: Contract Tests aktualisieren (OpenAPI/GraphQL)
+        - label: E2E Tests durchführen
+
+  - type: textarea
+    id: migration-steps
+    attributes:
+      label: Migration-Schritte
+      description: Schritte zur Durchführung des Refactorings
+      placeholder: |
+        1. Neue Abstraktionsschicht einführen
+        2. Tests auf neue Implementierung migrieren
+        3. Alte Implementierung parallel laufen lassen (Feature Flag)
+        4. Alte Implementierung entfernen
+        5. Dokumentation aktualisieren
+    validations:
+      required: false
+
+  - type: textarea
+    id: rollback-plan
+    attributes:
+      label: Rollback-Plan
+      description: Wie können Änderungen rückgängig gemacht werden?
+      placeholder: |
+        - Feature Flag deaktivieren
+        - Database Migration rückwärts laufen lassen
+        - Code-Revert via Git
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: acceptance-criteria
+    attributes:
+      label: Akzeptanzkriterien
+      description: Wann ist das Refactoring erfolgreich?
+      options:
+        - label: Alle bestehenden Features funktionieren unverändert
+        - label: Keine Regression in User Stories
+        - label: API-Kompatibilität gewährleistet
+        - label: Code Quality verbessert (Code Smells entfernt)
+        - label: Performance messbar verbessert
+        - label: Test Coverage gleichbleibend oder verbessert
+        - label: DDD Patterns korrekt angewendet
+        - label: Layer Separation eingehalten
+        - label: Ubiquitous Language konsistent
+
+  - type: checkboxes
+    id: definition-of-done
+    attributes:
+      label: Definition of Done
+      description: Checklist für Refactoring-Abschluss
+      options:
+        - label: Code Review durchgeführt
+        - label: Alle Tests erfolgreich (Unit, Integration, E2E)
+        - label: Performance-Messungen durchgeführt (falls relevant)
+        - label: Dokumentation aktualisiert (Architecture Decisions, API Docs)
+        - label: Ubiquitous Language Glossar aktualisiert
+        - label: Domain Model Diagramme aktualisiert
+        - label: Breaking Changes dokumentiert (CHANGELOG.md)
+        - label: Code Coverage mindestens gleichbleibend

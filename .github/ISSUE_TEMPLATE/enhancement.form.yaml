@@ -1,0 +1,436 @@
+name: Enhancement / Feature Request
+description: Verbesserung eines bestehenden Features oder neue Feature-Idee
+title: "[ENHANCE] "
+labels: ["enhancement", "needs-discussion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Enhancement / Feature Request
+        Verbesserung bestehender Features oder Vorschlag für neue Funktionalität.
+
+  - type: textarea
+    id: enhancement-description
+    attributes:
+      label: Enhancement-Beschreibung
+      description: Was soll verbessert/hinzugefügt werden?
+      placeholder: |
+        **Was:** Bewertungsfunktion für abgeschlossene Fahrten
+        **Warum:** Vertrauen in Platform erhöhen, Qualität sicherstellen
+    validations:
+      required: true
+
+  - type: textarea
+    id: value-proposition
+    attributes:
+      label: Nutzen & Business Value
+      description: Warum ist diese Verbesserung sinnvoll?
+      placeholder: |
+        **Nutzen für Benutzer:** Transparenz über Fahrer-Qualität
+        **Nutzen für System:** Datengrundlage für Empfehlungen
+        **Business Value:** Höhere Nutzerbindung, bessere Matchmaking
+    validations:
+      required: true
+
+  - type: dropdown
+    id: enhancement-type
+    attributes:
+      label: Typ
+      description: Art des Enhancements
+      options:
+        - Feature Enhancement (Verbesserung bestehend)
+        - Neues Feature (komplett neu)
+        - UX/UI Improvement
+        - Performance Optimization
+        - Developer Experience
+    validations:
+      required: true
+
+  - type: input
+    id: epic
+    attributes:
+      label: Epic
+      description: Zugehöriges Epic
+      placeholder: "z.B. Fahrten-Management, Qualitätssicherung"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorität
+      description: Feature-Priorität
+      options:
+        - Must-Have (kritisch für MVP/Release)
+        - Should-Have (wichtig, nicht blockierend)
+        - Could-Have (Nice-to-have)
+        - Won't-Have (später oder nie)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: story-points
+    attributes:
+      label: Aufwandsschätzung
+      description: Story Points
+      options:
+        - "1"
+        - "2"
+        - "3"
+        - "5"
+        - "8"
+        - "13"
+        - "21"
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Design-Konzepte & Architektur
+
+  - type: input
+    id: bounded-context
+    attributes:
+      label: Bounded Context (DDD)
+      description: Betroffener/neuer Bounded Context
+      placeholder: "z.B. Fahrtenmanagement, Qualitätssicherung"
+    validations:
+      required: true
+
+  - type: input
+    id: aggregates
+    attributes:
+      label: Neue/Geänderte Aggregates (DDD)
+      description: Aggregates die erstellt/erweitert werden (kommasepariert)
+      placeholder: "z.B. Fahrt (erweitert um Rating), FahrtRating (neu)"
+    validations:
+      required: false
+
+  - type: input
+    id: value-objects
+    attributes:
+      label: Neue Value Objects (DDD)
+      description: Value Objects die erstellt werden
+      placeholder: "z.B. Rating, Comment"
+    validations:
+      required: false
+
+  - type: input
+    id: domain-events
+    attributes:
+      label: Neue Domain Events (DDD)
+      description: Events die publiziert werden
+      placeholder: "z.B. FahrtBewertet, BewertungPubliziert"
+    validations:
+      required: false
+
+  - type: input
+    id: ubiquitous-language
+    attributes:
+      label: Ubiquitous Language Erweiterung
+      description: Neue Fachbegriffe
+      placeholder: "z.B. Bewertung, Rating, Sterne, Kommentar"
+    validations:
+      required: false
+
+  - type: input
+    id: ui-components
+    attributes:
+      label: Neue UI Komponenten (CDD)
+      description: Zu erstellende Frontend-Komponenten
+      placeholder: "z.B. RatingWidget, RatingList, StarRating"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: atomic-design-level
+    attributes:
+      label: Atomic Design Level (CDD)
+      description: Hauptkomponenten-Ebene
+      options:
+        - Atom
+        - Molekül
+        - Organismus
+        - Template
+        - Page
+        - "Nicht zutreffend"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: architecture-pattern
+    attributes:
+      label: Software-Architektur
+      description: Verwendete/erforderliche Architektur-Patterns
+      options:
+        - label: Hexagonal Architecture (Ports & Adapters)
+        - label: Event-Driven Architecture (Domain Events)
+        - label: CQRS Pattern (Command/Query Separation)
+        - label: Microservices (neuer Service erforderlich)
+
+  - type: checkboxes
+    id: api-first
+    attributes:
+      label: API-First Approach
+      description: API-Spezifikation erforderlich
+      options:
+        - label: OpenAPI Spec erforderlich (neue Endpoints)
+        - label: OpenAPI Spec Änderung (bestehende Endpoints)
+        - label: GraphQL Schema Erweiterung
+        - label: BFF Anpassung erforderlich
+        - label: API Versionierung (v1 → v2, Breaking Changes)
+
+  - type: textarea
+    id: api-endpoints
+    attributes:
+      label: API Endpoint(s)
+      description: Neue oder zu ändernde API-Endpoints
+      placeholder: |
+        **Neu:**
+        - POST /api/v1/rides/{id}/ratings
+        - GET /api/v1/rides/{id}/ratings
+        
+        **Geändert:**
+        - GET /api/v1/rides/{id} (inkl. Rating-Durchschnitt)
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Anforderungen
+
+  - type: textarea
+    id: functional-requirements
+    attributes:
+      label: Funktionale Anforderungen
+      description: Was muss das Feature können?
+      placeholder: |
+        - [ ] Benutzer kann Fahrt mit 1-5 Sternen bewerten
+        - [ ] Benutzer kann optionalen Kommentar hinzufügen
+        - [ ] Durchschnittliche Bewertung wird angezeigt
+        - [ ] Fahrer erhält Benachrichtigung bei neuer Bewertung
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: nfr
+    attributes:
+      label: Nicht-Funktionale Anforderungen
+      description: Performance, Security, Accessibility, etc.
+      options:
+        - label: "Performance: Response Time < 100ms"
+        - label: "Scalability: 10.000+ Bewertungen/Tag verarbeiten"
+        - label: "Security: Nur verifizierte Mitfahrer können bewerten"
+        - label: "Security: Nur ein Rating pro User pro Fahrt"
+        - label: "Accessibility: WCAG 2.1 AA konform"
+        - label: "Accessibility: Tastatur-Navigation"
+        - label: "Offline Support: Bewertung im Offline-Modus"
+
+  - type: checkboxes
+    id: ddd-requirements
+    attributes:
+      label: DDD-spezifische Anforderungen
+      description: Domain-Driven Design Aspekte
+      options:
+        - label: Invarianten definiert (z.B. Rating 1-5, nur ein Rating/User)
+        - label: Domain Events publizieren (z.B. FahrtBewertet)
+        - label: Bounded Context Interaktion (via Event/Anti-Corruption Layer)
+        - label: Aggregate Grenzen klar (Rating Teil von Fahrt oder separates Aggregate?)
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Lösungsvorschlag
+
+  - type: textarea
+    id: solution-architecture
+    attributes:
+      label: Grobe Architektur
+      description: Skizze der Architektur (Text/Diagramm)
+      placeholder: |
+        ```
+        Interface Layer: POST /api/v1/rides/{id}/ratings
+               ↓
+        Application Layer: RateFahrtUseCase
+               ↓
+        Domain Layer: Fahrt.addRating(Rating)
+               → publishes FahrtBewertet Event
+        ```
+    validations:
+      required: false
+
+  - type: textarea
+    id: api-contract
+    attributes:
+      label: API Contract (Vorschlag)
+      description: OpenAPI/GraphQL Snippet
+      placeholder: |
+        ```yaml
+        paths:
+          /api/v1/rides/{rideId}/ratings:
+            post:
+              summary: Fahrt bewerten
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      required: [stars]
+                      properties:
+                        stars:
+                          type: integer
+                          minimum: 1
+                          maximum: 5
+                        comment:
+                          type: string
+                          maxLength: 500
+        ```
+      render: yaml
+    validations:
+      required: false
+
+  - type: textarea
+    id: domain-model-changes
+    attributes:
+      label: Domain Model Änderungen
+      description: Code-Snippet der Domain-Logik
+      placeholder: |
+        ```typescript
+        // Value Object: Rating
+        export class Rating extends ValueObject<RatingProps> {
+          public static create(stars: number, comment?: string): Result<Rating> {
+            if (stars < 1 || stars > 5) {
+              return Result.fail('Rating must be between 1 and 5');
+            }
+            return Result.ok(new Rating({ stars, comment }));
+          }
+        }
+        
+        // Aggregate: Fahrt
+        export class Fahrt extends AggregateRoot<FahrtProps> {
+          public addRating(rating: Rating, userId: UserId): Result<void> {
+            // Invariante: User muss mitgefahren sein
+            if (!this.hasPassenger(userId)) {
+              return Result.fail('Only passengers can rate');
+            }
+            
+            this.props.ratings.push({ rating, userId });
+            this.addDomainEvent(new FahrtBewertetEvent({ ... }));
+            return Result.ok();
+          }
+        }
+        ```
+      render: typescript
+    validations:
+      required: false
+
+  - type: textarea
+    id: ui-component-proposal
+    attributes:
+      label: UI Component (Vorschlag)
+      description: Skizze der UI-Komponente
+      placeholder: |
+        ```tsx
+        export const RatingWidget: React.FC<RatingWidgetProps> = ({ rideId }) => {
+          const [stars, setStars] = useState(0);
+          const [comment, setComment] = useState('');
+          
+          return (
+            <form onSubmit={handleSubmit}>
+              <StarRating value={stars} onChange={setStars} />
+              <TextArea value={comment} onChange={setComment} />
+              <Button type="submit">Bewerten</Button>
+            </form>
+          );
+        };
+        ```
+      render: tsx
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Lösungsansätze
+      description: Andere Möglichkeiten zur Umsetzung
+      placeholder: |
+        **Alternative 1:** Rating als separates Aggregate
+        - Vorteile: Bessere Skalierbarkeit
+        - Nachteile: Komplexere Konsistenz-Sicherstellung
+        
+        **Alternative 2:** Externe Rating-Service nutzen
+        - Vorteile: Bewährte Lösung
+        - Nachteile: Vendor Lock-in
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Auswirkungen
+
+  - type: dropdown
+    id: breaking-changes
+    attributes:
+      label: Breaking Changes
+      description: Führt das Enhancement zu Breaking Changes?
+      options:
+        - Keine Breaking Changes
+        - API Breaking Changes (Versionierung v1 → v2)
+        - Database Migration erforderlich
+        - Frontend Breaking Changes
+        - Mehrere Breaking Changes
+    validations:
+      required: false
+
+  - type: textarea
+    id: affected-components
+    attributes:
+      label: Betroffene Komponenten
+      description: Welche Komponenten werden geändert/erstellt?
+      placeholder: |
+        - Domain Layer: Fahrt-Aggregate erweitern, Rating Value Object neu
+        - Application Layer: RateFahrtUseCase neu
+        - Infrastructure Layer: RatingRepository neu
+        - Interface Layer: RatingController neu
+        - Frontend: RatingWidget neu, RideDetails erweitern
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: test-strategy
+    attributes:
+      label: Test-Strategie
+      description: Wie wird das Feature getestet?
+      options:
+        - label: Unit Tests (Domain Layer)
+        - label: Integration Tests (Use Cases)
+        - label: API Contract Tests (OpenAPI Compliance)
+        - label: E2E Tests (User Flows)
+        - label: Performance Tests
+
+  - type: checkboxes
+    id: definition-of-done
+    attributes:
+      label: Definition of Done
+      description: Wann ist das Enhancement abgeschlossen?
+      options:
+        - label: Akzeptanzkriterien erfüllt
+        - label: API-Contract spezifiziert und dokumentiert
+        - label: Domain Model aktualisiert (PlantUML)
+        - label: Ubiquitous Language Glossar erweitert
+        - label: Unit Tests (>80% Coverage)
+        - label: Integration Tests
+        - label: E2E Tests
+        - label: Code Review
+        - label: Dokumentation aktualisiert
+        - label: Architecture Decision Record erstellt
+        - label: Performance getestet
+        - label: Accessibility getestet (WCAG 2.1 AA)

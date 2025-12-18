@@ -1,0 +1,288 @@
+name: Bug Report
+description: Melde einen Fehler zur Behebung
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Bug Report
+        Melde einen Fehler mit detaillierten Informationen zur Reproduktion und zum Kontext.
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Bug-Beschreibung
+      description: Was ist das Problem?
+      placeholder: |
+        **Erwartetes Verhalten:** System validiert Abfahrtszeit
+        **Tatsächliches Verhalten:** Fahrt mit Vergangenheitsdatum wird akzeptiert
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Schritte zur Reproduktion
+      description: Wie kann der Fehler reproduziert werden?
+      placeholder: |
+        1. Navigiere zu /rides/create
+        2. Gib vergangenes Datum ein (z.B. 2020-01-01)
+        3. Klicke auf "Fahrt erstellen"
+        4. Fahrt wird ohne Validierung gespeichert
+    validations:
+      required: true
+
+  - type: dropdown
+    id: reproducibility
+    attributes:
+      label: Reproduzierbarkeit
+      description: Wie oft tritt der Fehler auf?
+      options:
+        - Immer reproduzierbar
+        - Manchmal reproduzierbar
+        - Selten reproduzierbar
+        - Einmalig aufgetreten
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Umgebung
+      description: Browser/Client, Backend Version, Environment
+      placeholder: "Chrome 120 / Node.js 20.x / PostgreSQL 16 / Production"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Kontext (DDD & Architektur)
+
+  - type: input
+    id: bounded-context
+    attributes:
+      label: Bounded Context (DDD)
+      description: Betroffener Bounded Context
+      placeholder: "z.B. Fahrtenmanagement, Benutzerverwaltung"
+    validations:
+      required: true
+
+  - type: input
+    id: aggregate
+    attributes:
+      label: Aggregate (DDD)
+      description: Betroffenes Aggregate
+      placeholder: "z.B. Fahrt, Benutzer"
+    validations:
+      required: false
+
+  - type: input
+    id: domain-event-issue
+    attributes:
+      label: Domain Event Problem
+      description: Fehlendes oder fehlerhaftes Domain Event
+      placeholder: "z.B. FahrtErstellt wird nicht publiziert"
+    validations:
+      required: false
+
+  - type: input
+    id: business-rule
+    attributes:
+      label: Verletzte Business Rule
+      description: Welche Geschäftsregel/Invariante ist betroffen?
+      placeholder: "z.B. Invariante 'availableSeats > 0' nicht geprüft"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: architecture-layer
+    attributes:
+      label: Software-Architektur Layer
+      description: Welcher Layer ist betroffen?
+      options:
+        - Domain Layer (Entities, Value Objects, Aggregates)
+        - Application Layer (Use Cases, DTOs)
+        - Infrastructure Layer (Repositories, External Services)
+        - Interface Layer (Controllers, GraphQL Resolvers)
+        - Frontend (UI Components, State Management)
+        - Mehrere Layer betroffen
+    validations:
+      required: true
+
+  - type: input
+    id: api-endpoint
+    attributes:
+      label: API Endpoint (falls betroffen)
+      description: Betroffener REST/GraphQL Endpoint
+      placeholder: "z.B. POST /api/v1/rides"
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Technische Details
+
+  - type: textarea
+    id: error-messages
+    attributes:
+      label: Fehlermeldungen / Logs
+      description: Error-Logs, Stack Traces, Console Errors
+      placeholder: |
+        Error: Validation failed: departureTime must be in the future
+          at RideAggregate.create (ride.aggregate.ts:45)
+          at CreateRideUseCase.execute (create-ride.usecase.ts:28)
+      render: shell
+    validations:
+      required: false
+
+  - type: input
+    id: code-reference
+    attributes:
+      label: Code-Referenz
+      description: Betroffene Datei und Zeile
+      placeholder: "src/domain/rides/ride.aggregate.ts:45"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: root-cause
+    attributes:
+      label: Root Cause Analysis
+      description: Vermutete Ursache des Fehlers
+      options:
+        - Noch unbekannt
+        - Fehlende Validierung (Domain Layer)
+        - Falsche Business Logic (Use Case)
+        - Datenbank-Inkonsistenz (Repository/Infrastructure)
+        - API-Contract Verletzung (OpenAPI Spec nicht eingehalten)
+        - Race Condition (Concurrency Problem)
+        - Fehlendes Domain Event
+        - Frontend State Management Bug
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Auswirkungen
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Schweregrad
+      description: Wie kritisch ist der Fehler?
+      options:
+        - "Kritisch (System nicht nutzbar, Datenverlust)"
+        - "Hoch (Wichtige Features betroffen)"
+        - "Mittel (Features eingeschränkt nutzbar)"
+        - "Niedrig (Kosmetischer Fehler)"
+    validations:
+      required: true
+
+  - type: input
+    id: affected-user-story
+    attributes:
+      label: Betroffene User Story
+      description: Issue-Nummer der betroffenen User Story
+      placeholder: "#123"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: architecture-impact
+    attributes:
+      label: Auswirkungen auf Architektur
+      description: Hauptproblem auf Architektur-Ebene
+      options:
+        - Keine Architektur-Auswirkungen
+        - Invariante verletzt (Aggregate in inkonsistentem Zustand)
+        - Domain Event fehlt (Nachfolge-Prozesse nicht ausgelöst)
+        - Bounded Context Grenze verletzt
+        - API-Contract gebrochen (OpenAPI Spec nicht eingehalten)
+    validations:
+      required: false
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Lösungsansatz
+      description: Vorschlag zur Behebung (Code-Snippet)
+      placeholder: |
+        ```typescript
+        // Fix: Validierung in Domain Layer hinzufügen
+        if (ride.departureTime <= new Date()) {
+          return Result.fail<Ride>('Departure time must be in the future');
+        }
+        ```
+      render: typescript
+    validations:
+      required: false
+
+  - type: dropdown
+    id: solution-layer
+    attributes:
+      label: DDD/Architecture Alignment
+      description: Wo soll der Fix erfolgen?
+      options:
+        - Noch unklar
+        - Domain Layer Fix (Invarianten-Validierung)
+        - Application Layer Fix (Use Case anpassen)
+        - Infrastructure Layer Fix (Repository Query)
+        - API Fix (OpenAPI Spec aktualisieren)
+        - Domain Event hinzufügen
+        - Mehrere Layer
+    validations:
+      required: false
+
+  - type: dropdown
+    id: breaking-changes
+    attributes:
+      label: Breaking Changes
+      description: Führt der Fix zu Breaking Changes?
+      options:
+        - Keine Breaking Changes
+        - API Breaking Change (Versionierung erforderlich)
+        - Database Migration erforderlich
+        - Frontend Anpassungen erforderlich
+        - Mehrere Breaking Changes
+    validations:
+      required: false
+
+  - type: textarea
+    id: test-strategy
+    attributes:
+      label: Test-Strategie
+      description: Wie soll der Fix getestet werden?
+      placeholder: |
+        **Unit Test:**
+        ```typescript
+        it('should reject ride with past departure time', () => {
+          const result = Ride.create({ departureTime: pastDate });
+          expect(result.isFailure).toBe(true);
+        });
+        ```
+        
+        **E2E Test:** Reproduktions-Szenario als Playwright Test
+      render: typescript
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: definition-of-done
+    attributes:
+      label: Definition of Done
+      description: Checklist für Bug-Fix
+      options:
+        - label: Bug ist behoben und nicht mehr reproduzierbar
+        - label: Unit Tests für Bug-Fix geschrieben
+        - label: Integration Tests aktualisiert
+        - label: E2E Test für Reproduktionsszenario hinzugefügt
+        - label: Dokumentation aktualisiert (falls API/Verhalten geändert)
+        - label: Domain Model aktualisiert (falls Struktur geändert)
+        - label: OpenAPI Spec aktualisiert (falls API geändert)

@@ -1,0 +1,277 @@
+name: User Story
+description: Erstelle eine neue User Story für ein Feature
+title: "[STORY] "
+labels: ["user-story", "needs-refinement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## User Story Template
+        Erstelle eine neue User Story nach dem Format: **Als** [Rolle] **möchte ich** [Ziel] **um** [Nutzen] zu erreichen.
+        
+  - type: textarea
+    id: user-story
+    attributes:
+      label: User Story
+      description: Beschreibe die User Story in einem Satz
+      placeholder: |
+        Als Fahrer
+        möchte ich eine Fahrt mit Startort, Zielort und Abfahrtszeit anbieten
+        um Mitfahrer zu finden und Fahrtkosten zu teilen.
+    validations:
+      required: true
+
+  - type: input
+    id: epic
+    attributes:
+      label: Epic
+      description: Zugehöriges Epic
+      placeholder: "z.B. Fahrten-Management"
+    validations:
+      required: true
+
+  - type: input
+    id: workflow-phase
+    attributes:
+      label: Workflowphase
+      description: Phase aus der Story Map
+      placeholder: "z.B. Prepare Class, Start Lesson"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorität
+      description: Story-Priorität für MVP/Release
+      options:
+        - Must-Have
+        - Should-Have
+        - Could-Have
+    validations:
+      required: true
+
+  - type: dropdown
+    id: story-points
+    attributes:
+      label: Story Points
+      description: Aufwandsschätzung
+      options:
+        - "1"
+        - "2"
+        - "3"
+        - "5"
+        - "8"
+        - "13"
+        - "21"
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Design-Konzepte
+        
+  - type: input
+    id: bounded-context
+    attributes:
+      label: Bounded Context (DDD)
+      description: DDD Bounded Context
+      placeholder: "z.B. Fahrtenmanagement, Benutzerverwaltung, Benachrichtigungen"
+    validations:
+      required: true
+
+  - type: input
+    id: aggregates
+    attributes:
+      label: Aggregate(s) (DDD)
+      description: Betroffene Aggregates (kommasepariert)
+      placeholder: "z.B. Fahrt, Benutzer, Mitfahranfrage"
+    validations:
+      required: false
+
+  - type: input
+    id: domain-events
+    attributes:
+      label: Domain Events (DDD)
+      description: Zu publizierende Domain Events (kommasepariert)
+      placeholder: "z.B. FahrtErstellt, AnfrageAkzeptiert, FahrtStorniert"
+    validations:
+      required: false
+
+  - type: input
+    id: ubiquitous-language
+    attributes:
+      label: Ubiquitous Language Begriffe
+      description: Wichtige Fachbegriffe aus der Domäne (kommasepariert)
+      placeholder: "z.B. Fahrt, Mitfahrer, Abfahrtszeit, verfügbare Plätze"
+    validations:
+      required: false
+
+  - type: input
+    id: ui-components
+    attributes:
+      label: UI Komponenten (CDD)
+      description: Zu erstellende/ändernde UI-Komponenten (kommasepariert)
+      placeholder: "z.B. FahrtListe, FahrtDetails, AnfrageFormular"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: atomic-design-level
+    attributes:
+      label: Atomic Design Level (CDD)
+      description: Hauptkomponenten-Ebene
+      options:
+        - Atom
+        - Molekül
+        - Organismus
+        - Template
+        - Page
+        - "Nicht zutreffend"
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Architektur & Implementierung
+
+  - type: dropdown
+    id: architecture-pattern
+    attributes:
+      label: Software-Architektur
+      description: Verwendete Architektur-Pattern
+      options:
+        - label: Hexagonal Architecture (Ports & Adapters)
+        - label: Layered Architecture
+        - label: Microservices Architecture
+        - label: Event-Driven Architecture
+
+  - type: checkboxes
+    id: api-first
+    attributes:
+      label: API-First Approach
+      description: API-Spezifikation erforderlich
+      options:
+        - label: "OpenAPI Spec erforderlich (docs/api/)"
+        - label: "GraphQL Schema erforderlich (docs/api/graphql/)"
+        - label: "BFF (Backend-for-Frontend) erforderlich"
+
+  - type: input
+    id: api-endpoints
+    attributes:
+      label: API Endpoint(s)
+      description: Zu erstellende/ändernde API-Endpoints
+      placeholder: "z.B. POST /api/v1/rides, GET /api/v1/rides/{id}"
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Details
+
+  - type: textarea
+    id: conversation-points
+    attributes:
+      label: Conversation Points
+      description: Offene Fragen und Gesprächspunkte
+      placeholder: |
+        1. Wie soll die Validierung der Abfahrtszeit erfolgen?
+        2. Müssen historische Fahrten gespeichert werden?
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Akzeptanzkriterien
+      description: Funktionale Akzeptanzkriterien (eine pro Zeile)
+      placeholder: |
+        - [ ] Benutzer kann Startort und Zielort eingeben
+        - [ ] System validiert Abfahrtszeit (muss in Zukunft liegen)
+        - [ ] Anzahl verfügbarer Plätze muss > 0 sein
+        - [ ] Fahrt wird in Datenbank gespeichert
+        - [ ] Domain Event "FahrtErstellt" wird publiziert
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: nfr
+    attributes:
+      label: Nicht-Funktionale Anforderungen
+      description: Performance, Security, Accessibility
+      options:
+        - label: "Performance: Response Time < 200ms"
+        - label: "Security: Authentifizierung erforderlich"
+        - label: "Security: RBAC (Role-Based Access Control)"
+        - label: "Accessibility: WCAG 2.1 AA konform"
+        - label: "Accessibility: Keyboard Navigation"
+        - label: "Testing: Unit Tests erforderlich"
+        - label: "Testing: Integration Tests erforderlich"
+        - label: "Testing: E2E Tests erforderlich"
+
+  - type: checkboxes
+    id: ddd-criteria
+    attributes:
+      label: DDD-spezifische Akzeptanzkriterien
+      description: Domain-Driven Design Anforderungen
+      options:
+        - label: "Invarianten sichergestellt (z.B. availableSeats > 0)"
+        - label: "Domain Events publiziert"
+        - label: "Bounded Context Grenzen respektiert"
+
+  - type: textarea
+    id: technical-notes
+    attributes:
+      label: Technische Notizen
+      description: Abhängigkeiten, Datenmodell, API Contract
+      placeholder: |
+        **Abhängigkeiten:**
+        - User Story #123 muss zuerst implementiert sein
+        
+        **Datenmodell:**
+        - Entity: Fahrt
+        - Value Objects: Location, DateTime, PositiveInteger
+    validations:
+      required: false
+
+  - type: textarea
+    id: api-contract
+    attributes:
+      label: API Contract (Vorschlag)
+      description: OpenAPI/GraphQL Snippet (wird in Phase 2 detailliert)
+      placeholder: |
+        ```yaml
+        paths:
+          /api/v1/rides:
+            post:
+              summary: Fahrt erstellen
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/CreateRideRequest'
+        ```
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: definition-of-done
+    attributes:
+      label: Definition of Done
+      description: Checklist für Story-Abschluss
+      options:
+        - label: "User Story erfüllt INVEST-Kriterien"
+        - label: "Akzeptanzkriterien sind testbar formuliert"
+        - label: "Bounded Context und Aggregate sind identifiziert"
+        - label: "API-Contract (OpenAPI/GraphQL) ist spezifiziert"
+        - label: "Tests sind implementiert (Unit, Integration, E2E)"
+        - label: "Code Review durchgeführt"
+        - label: "Dokumentation aktualisiert (API Docs, README)"
+        - label: "Domain Events sind dokumentiert"
