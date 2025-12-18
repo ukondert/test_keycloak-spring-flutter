@@ -7,7 +7,8 @@ A complete full-stack demo project showcasing Keycloak authentication integratio
 ```
 .
 ├── backend/         # Spring Boot backend (Java 17, Hexagonal Architecture, DDD)
-└── frontend/        # Flutter frontend (coming soon)
+├── flutter_app/     # Flutter frontend (Atomic Design, Provider, Material Design 3)
+└── docker/          # Docker configuration for Keycloak & PostgreSQL
 ```
 
 ## Backend
@@ -30,7 +31,38 @@ mvn spring-boot:run -pl host-application
 
 ## Frontend
 
-Coming soon - Flutter application with Keycloak integration.
+The frontend is a production-ready Flutter application following:
+- **Atomic Design Principles** (Atoms, Molecules, Organisms, Pages)
+- **Feature-First Structure** aligned with DDD bounded contexts
+- **Provider State Management**
+- **Material Design 3**
+- **JWT Authentication with Keycloak**
+
+[➡️ Flutter App Documentation](./flutter_app/README.md)
+
+### Quick Start Flutter App
+
+```bash
+cd flutter_app
+flutter pub get
+flutter pub run build_runner build --delete-conflicting-outputs
+flutter run
+```
+
+## Full Stack Quick Start
+
+```bash
+# 1. Start Keycloak & PostgreSQL
+docker-compose up -d
+
+# 2. Start Backend (in new terminal)
+cd backend
+mvn spring-boot:run -pl host-application
+
+# 3. Start Flutter App (in new terminal)
+cd flutter_app
+flutter run
+```
 
 ---
 
