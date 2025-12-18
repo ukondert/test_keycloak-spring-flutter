@@ -1,68 +1,201 @@
-# Keycloak Spring Boot & Flutter Demo
+# Keycloak Spring Boot & Flutter Demo 🚀
 
-A complete full-stack demo project showcasing Keycloak authentication integration with Spring Boot backend and Flutter frontend.
+**A complete full-stack demo application showcasing modern authentication patterns.**
 
-## Project Structure
+This project demonstrates enterprise-grade authentication and authorization using:
+- 🔐 **Keycloak** - Authentication & Authorization Provider (Docker)
+- ☕ **Spring Boot 3** - Backend Middle-tier (REST API + JPA + Hexagonal Architecture)
+- 📱 **Flutter** - Cross-platform Frontend (Material Design 3 + Atomic Design)
+- 🐘 **PostgreSQL** - Persistent Database
+
+## 🎯 Key Features
+
+✅ User Registration with Keycloak  
+✅ OAuth2/JWT Authentication  
+✅ Protected API Endpoints  
+✅ Secure Token Storage  
+✅ Clean Architecture (Hexagonal + DDD)  
+✅ Component-Driven Design (Atomic Design)  
+✅ Pre-configured Docker Infrastructure  
+✅ Production-Ready Code Quality  
+
+## 📚 Documentation
+
+- **[PROJECT_SETUP.md](PROJECT_SETUP.md)** - Complete setup guide with troubleshooting
+- **[backend/README.md](backend/README.md)** - Backend architecture & API details
+- **[flutter_app/README.md](flutter_app/README.md)** - Flutter app structure & design system
+
+## ⚡ Quick Start (5 Minutes)
+
+```bash
+# 1. Start Infrastructure (Keycloak + PostgreSQL)
+docker compose up -d
+
+# 2. Start Backend (in new terminal)
+cd backend && mvn spring-boot:run -pl host-application
+
+# 3. Start Flutter App (in new terminal)
+cd flutter_app && flutter pub get && flutter run -d chrome
+```
+
+**That's it!** Open your browser and start using the app.
+
+## 📁 Project Structure
 
 ```
 .
 ├── backend/         # Spring Boot backend (Java 17, Hexagonal Architecture, DDD)
 ├── flutter_app/     # Flutter frontend (Atomic Design, Provider, Material Design 3)
-└── docker/          # Docker configuration for Keycloak & PostgreSQL
+├── docker/          # Docker configuration for Keycloak & PostgreSQL
+├── docker-compose.yml
+└── PROJECT_SETUP.md # Detailed setup guide
 ```
 
-## Backend
+## 🏗️ Architecture
 
-The backend is a production-ready Spring Boot application following:
-- **Hexagonal Architecture (Ports & Adapters)**
-- **Domain-Driven Design (DDD) Tactical Patterns**
-- **Spring Security with Keycloak OAuth2/JWT**
-- **Multi-module Maven project**
+```
+┌─────────────────┐
+│  Flutter App    │  Material Design 3
+│  - Register     │  Port: 3000/8081
+│  - Login        │  (Atomic Design)
+│  - Welcome      │
+└────────┬────────┘
+         │ OAuth2 + JWT Tokens
+         ↓
+┌─────────────────┐
+│  Spring Boot    │  Hexagonal Architecture
+│  - REST API     │  Port: 8082
+│  - Security     │  (DDD Patterns)
+│  - JPA          │
+└────────┬────────┘
+         │
+         ↓
+┌─────────────────┐     ┌──────────────┐
+│  Keycloak       │────→│ PostgreSQL   │
+│  Auth Server    │     │  Database    │
+│  Port: 8080     │     │  Port: 5432  │
+└─────────────────┘     └──────────────┘
+```
+
+## 🛠️ Technology Stack
+
+| Layer | Technology | Details |
+|-------|------------|---------|
+| **Backend** | Spring Boot 3.2.0 | Java 17, Maven Multi-module |
+| | Spring Security | OAuth2 + JWT |
+| | Spring Data JPA | Flyway Migrations |
+| **Frontend** | Flutter 3.x | Dart 3.x |
+| | Provider | State Management |
+| | go_router | Navigation with Guards |
+| | Material Design 3 | UI Framework |
+| **Auth** | Keycloak 23.0.3 | Pre-configured Realm |
+| **Database** | PostgreSQL 15 | Schema-per-module |
+| **Infra** | Docker Compose | Orchestration |
+
+## 📋 API Endpoints
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/api/v1/users/register` | Public | Register new user |
+| GET | `/api/v1/users/me` | JWT | Get current authenticated user |
+| GET | `/api/v1/users/{id}` | JWT | Get user by ID |
+
+## 🎯 User Flow
+
+1. **Register** → Create account in Keycloak via backend API
+2. **Login** → Authenticate with Keycloak, receive JWT tokens
+3. **Welcome** → Access protected page, view user profile
+4. **Logout** → Clear tokens, return to login
+
+## 🔧 Backend Architecture
+
+**Hexagonal Architecture (Ports & Adapters) + DDD**
+
+```
+backend/
+├── shared/           # Shared Kernel
+│   ├── Email        # Value Object
+│   └── UserId       # Value Object
+├── user-domain/      # User Bounded Context
+│   ├── domain/      # Pure domain logic
+│   ├── application/ # Use cases
+│   └── adapter/     # REST, JPA, Keycloak
+└── host-application/ # Main app
+```
 
 [➡️ Backend Documentation](./backend/README.md)
 
-### Quick Start Backend
+## 🎨 Frontend Architecture
 
-```bash
-cd backend
-mvn clean install
-mvn spring-boot:run -pl host-application
+**Atomic Design + Feature-First + Provider**
+
 ```
-
-## Frontend
-
-The frontend is a production-ready Flutter application following:
-- **Atomic Design Principles** (Atoms, Molecules, Organisms, Pages)
-- **Feature-First Structure** aligned with DDD bounded contexts
-- **Provider State Management**
-- **Material Design 3**
-- **JWT Authentication with Keycloak**
+flutter_app/
+├── design_system/    # Design Tokens + Components
+│   ├── atoms/       # Basic components
+│   ├── molecules/   # Composed components
+│   └── organisms/   # Complex components
+├── features/auth/    # Authentication feature
+│   ├── data/        # DTOs, Repositories
+│   └── presentation/ # Pages, Providers
+└── core/            # Navigation, HTTP, Storage
+```
 
 [➡️ Flutter App Documentation](./flutter_app/README.md)
 
-### Quick Start Flutter App
+## 🧪 Testing
 
 ```bash
-cd flutter_app
-flutter pub get
-flutter pub run build_runner build --delete-conflicting-outputs
-flutter run
+# Backend tests (15 unit tests)
+cd backend && mvn test
+
+# Flutter tests
+cd flutter_app && flutter test
+
+# API testing (after starting services)
+curl -X POST http://localhost:8082/api/v1/users/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"demo","email":"demo@example.com","password":"Demo123!","firstName":"Demo","lastName":"User"}'
 ```
 
-## Full Stack Quick Start
+## 🚨 Troubleshooting
 
+**Keycloak not starting?**
 ```bash
-# 1. Start Keycloak & PostgreSQL
-docker-compose up -d
-
-# 2. Start Backend (in new terminal)
-cd backend
-mvn spring-boot:run -pl host-application
-
-# 3. Start Flutter App (in new terminal)
-cd flutter_app
-flutter run
+docker compose logs keycloak
+docker compose restart keycloak
 ```
+
+**Backend connection issues?**
+```bash
+docker compose exec postgres pg_isready
+curl http://localhost:8080/health/ready
+```
+
+**Flutter build issues?**
+```bash
+flutter clean && flutter pub get
+flutter doctor
+```
+
+**See [PROJECT_SETUP.md](PROJECT_SETUP.md) for detailed troubleshooting.**
+
+## ⚠️ Security Notes
+
+This is a **DEMO** project. For production:
+- ✅ Change default passwords and secrets
+- ✅ Enable HTTPS/SSL
+- ✅ Use proper secrets management
+- ✅ Enable Keycloak email verification
+- ✅ Implement token refresh
+- ✅ Add rate limiting and monitoring
+
+## 📖 Learning Resources
+
+- [Spring Boot Security](https://spring.io/guides/topicals/spring-security-architecture)
+- [Keycloak Documentation](https://www.keycloak.org/documentation)
+- [Flutter Authentication](https://flutter.dev/docs/cookbook/networking/authenticated-requests)
+- [DDD Patterns](https://martinfowler.com/tags/domain%20driven%20design.html)
 
 ---
 
