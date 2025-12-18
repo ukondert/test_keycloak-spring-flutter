@@ -1,4 +1,40 @@
-# template-bmad_method_ext
+# Keycloak Spring Boot & Flutter Demo
+
+A complete full-stack demo project showcasing Keycloak authentication integration with Spring Boot backend and Flutter frontend.
+
+## Project Structure
+
+```
+.
+├── backend/         # Spring Boot backend (Java 17, Hexagonal Architecture, DDD)
+└── frontend/        # Flutter frontend (coming soon)
+```
+
+## Backend
+
+The backend is a production-ready Spring Boot application following:
+- **Hexagonal Architecture (Ports & Adapters)**
+- **Domain-Driven Design (DDD) Tactical Patterns**
+- **Spring Security with Keycloak OAuth2/JWT**
+- **Multi-module Maven project**
+
+[➡️ Backend Documentation](./backend/README.md)
+
+### Quick Start Backend
+
+```bash
+cd backend
+mvn clean install
+mvn spring-boot:run -pl host-application
+```
+
+## Frontend
+
+Coming soon - Flutter application with Keycloak integration.
+
+---
+
+# Original Template Documentation
 
 Template für die systematische Umsetzung von Softwareprojekten mit Domain-Driven Design (DDD) und AI-gestützten Chatmodes.
 
