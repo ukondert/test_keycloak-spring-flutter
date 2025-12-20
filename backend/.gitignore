@@ -20,7 +20,7 @@ buildNumber.properties
 *.iws
 *.iml
 *.ipr
-out/
+/out/
 
 # NetBeans
 nbproject/private/

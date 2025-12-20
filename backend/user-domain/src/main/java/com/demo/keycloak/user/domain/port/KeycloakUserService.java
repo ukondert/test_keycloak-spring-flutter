@@ -33,4 +33,13 @@ public interface KeycloakUserService {
      * @param keycloakId Keycloak user ID
      */
     void deleteUser(String keycloakId);
+
+    /**
+     * Authenticate user and return tokens
+     * 
+     * @param username User's username
+     * @param password User's password
+     * @return Token information
+     */
+    Object authenticate(String username, String password);
 }

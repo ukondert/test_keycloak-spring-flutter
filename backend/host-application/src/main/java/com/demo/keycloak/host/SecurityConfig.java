@@ -40,6 +40,7 @@ public class SecurityConfig {
                 // Public endpoints
                 .requestMatchers(
                     "/api/v1/users/register",
+                    "/api/v1/users/login",
                     "/actuator/health",
                     "/actuator/info"
                 ).permitAll()

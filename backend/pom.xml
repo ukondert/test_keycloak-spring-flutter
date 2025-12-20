@@ -72,8 +72,23 @@
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
+
+    <dependencies>
+        <!-- Global exclusions to remove Logback -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
 
     <build>
         <pluginManagement>

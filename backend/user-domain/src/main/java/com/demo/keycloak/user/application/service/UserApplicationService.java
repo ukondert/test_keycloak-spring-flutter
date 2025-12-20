@@ -110,4 +110,12 @@ public class UserApplicationService {
         return userRepository.findByKeycloakId(keycloakId)
             .orElseThrow(() -> new ResourceNotFoundException("User with Keycloak ID: " + keycloakId));
     }
+
+    /**
+     * Use Case: Authenticate user
+     */
+    public Object login(String username, String password) {
+        log.info("Attempting login for user: {}", username);
+        return keycloakUserService.authenticate(username, password);
+    }
 }

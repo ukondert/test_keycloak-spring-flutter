@@ -39,16 +39,16 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8080/realms/demo}
-          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI:http://localhost:8080/realms/demo/protocol/openid-connect/certs}
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8080/realms/demo-realm}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI:http://localhost:8080/realms/demo-realm/protocol/openid-connect/certs}
 
 # Keycloak Admin Client Configuration
 keycloak:
   auth-server-url: ${KEYCLOAK_AUTH_SERVER_URL:http://localhost:8080}
-  realm: ${KEYCLOAK_REALM:demo}
-  resource: ${KEYCLOAK_CLIENT_ID:backend-client}
+  realm: ${KEYCLOAK_REALM:demo-realm}
+  resource: ${KEYCLOAK_CLIENT_ID:demo-backend}
   credentials:
-    secret: ${KEYCLOAK_CLIENT_SECRET:your-client-secret}
+    secret: ${KEYCLOAK_CLIENT_SECRET:demo-backend-secret-change-in-production}
 
 # Server Configuration
 server:

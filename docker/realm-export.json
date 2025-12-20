@@ -44,12 +44,7 @@
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,
       "nodeReRegistrationTimeout": -1,
-      "defaultClientScopes": [
-        "web-origins",
-        "profile",
-        "roles",
-        "email"
-      ],
+      "defaultClientScopes": ["web-origins", "profile", "roles", "email"],
       "optionalClientScopes": [
         "address",
         "phone",
@@ -159,12 +154,7 @@
           }
         }
       ],
-      "defaultClientScopes": [
-        "web-origins",
-        "profile",
-        "roles",
-        "email"
-      ],
+      "defaultClientScopes": ["web-origins", "profile", "roles", "email"],
       "optionalClientScopes": [
         "address",
         "phone",
@@ -177,11 +167,7 @@
         "myapp://callback",
         "myapp://logout"
       ],
-      "webOrigins": [
-        "http://localhost:3000",
-        "http://localhost:8081",
-        "+"
-      ]
+      "webOrigins": ["http://localhost:3000", "http://localhost:8081", "+"]
     }
   ],
   "roles": {
@@ -202,12 +188,8 @@
       }
     ]
   },
-  "defaultRoles": [
-    "user"
-  ],
-  "requiredCredentials": [
-    "password"
-  ],
+  "defaultRoles": ["user"],
+  "requiredCredentials": ["password"],
   "passwordPolicy": "hashIterations(27500)",
   "otpPolicyType": "totp",
   "otpPolicyAlgorithm": "HmacSHA1",
@@ -215,14 +197,9 @@
   "otpPolicyDigits": 6,
   "otpPolicyLookAheadWindow": 1,
   "otpPolicyPeriod": 30,
-  "otpSupportedApplications": [
-    "FreeOTP",
-    "Google Authenticator"
-  ],
+  "otpSupportedApplications": ["FreeOTP", "Google Authenticator"],
   "webAuthnPolicyRpEntityName": "keycloak",
-  "webAuthnPolicySignatureAlgorithms": [
-    "ES256"
-  ],
+  "webAuthnPolicySignatureAlgorithms": ["ES256"],
   "webAuthnPolicyRpId": "",
   "webAuthnPolicyAttestationConveyancePreference": "not specified",
   "webAuthnPolicyAuthenticatorAttachment": "not specified",
@@ -242,9 +219,7 @@
   },
   "smtpServer": {},
   "eventsEnabled": false,
-  "eventsListeners": [
-    "jboss-logging"
-  ],
+  "eventsListeners": ["jboss-logging"],
   "enabledEventTypes": [],
   "adminEventsEnabled": false,
   "adminEventsDetailsEnabled": false,
@@ -252,15 +227,6 @@
   "identityProviderMappers": [],
   "internationalizationEnabled": false,
   "supportedLocales": [],
-  "authenticationFlows": [],
-  "authenticatorConfig": [],
-  "requiredActions": [],
-  "browserFlow": "browser",
-  "registrationFlow": "registration",
-  "directGrantFlow": "direct grant",
-  "resetCredentialsFlow": "reset credentials",
-  "clientAuthenticationFlow": "clients",
-  "dockerAuthenticationFlow": "docker auth",
   "attributes": {
     "cibaBackchannelTokenDeliveryMode": "poll",
     "cibaExpiresIn": "120",

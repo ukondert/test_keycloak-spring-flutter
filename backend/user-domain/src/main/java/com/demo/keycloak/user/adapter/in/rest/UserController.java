@@ -1,7 +1,9 @@
 package com.demo.keycloak.user.adapter.in.rest;
 
 import com.demo.keycloak.shared.valueobject.UserId;
+import com.demo.keycloak.user.adapter.in.rest.dto.LoginRequestDto;
 import com.demo.keycloak.user.adapter.in.rest.dto.RegisterUserRequestDto;
+import com.demo.keycloak.user.adapter.in.rest.dto.TokenResponseDto;
 import com.demo.keycloak.user.adapter.in.rest.dto.UserResponseDto;
 import com.demo.keycloak.user.application.command.RegisterUserCommand;
 import com.demo.keycloak.user.application.query.UserQuery;
@@ -10,6 +12,7 @@ import com.demo.keycloak.user.domain.model.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.keycloak.representations.AccessTokenResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -50,6 +53,31 @@ public class UserController {
         UserResponseDto response = mapper.toDto(user);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    /**
+     * Login user
+     * 
+     * POST /api/v1/users/login
+     * Public endpoint
+     */
+    @PostMapping("/login")
+    public ResponseEntity<TokenResponseDto> login(@Valid @RequestBody LoginRequestDto request) {
+        log.info("Received login request for username: {}", request.username());
+        
+        AccessTokenResponse tokenResponse = (AccessTokenResponse) userApplicationService.login(request.username(), request.password());
+        
+        TokenResponseDto response = new TokenResponseDto(
+            tokenResponse.getToken(),
+            (int) tokenResponse.getExpiresIn(),
+            (int) tokenResponse.getRefreshExpiresIn(),
+            tokenResponse.getRefreshToken(),
+            tokenResponse.getTokenType(),
+            tokenResponse.getSessionState(),
+            tokenResponse.getScope()
+        );
+        
+        return ResponseEntity.ok(response);
     }
     
     /**
