@@ -23,10 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserApplicationService {
-    
+
     private final UserRepository userRepository;
     private final KeycloakUserService keycloakUserService;
-    
+
     /**
      * Use Case: Register a new user
      * 
@@ -35,80 +35,81 @@ public class UserApplicationService {
     @Transactional
     public User registerUser(RegisterUserCommand command) {
         log.info("Registering new user with username: {}", command.username());
-        
+
         // Check if user already exists
         if (userRepository.existsByUsername(command.username())) {
             throw new UserAlreadyExistsException("Username already exists: " + command.username());
         }
-        
+
         Email email = Email.of(command.email());
         if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistsException("Email already exists: " + command.email());
         }
-        
+
         // Create domain user object
         User user = User.createNew(
-            command.username(),
-            email,
-            command.firstName(),
-            command.lastName()
-        );
-        
+                command.username(),
+                email,
+                command.firstName(),
+                command.lastName());
+
         // Save user to database first
         User savedUser = userRepository.save(user);
-        
+        log.debug("User saved to database: {}", savedUser);
         try {
             // Create user in Keycloak
+            log.debug("Try to create user in Keycloak: {}", savedUser, command.password());
             String keycloakId = keycloakUserService.createUser(savedUser, command.password());
-            
+            log.debug("User created in Keycloak: {}", keycloakId);
+
             // Link user with Keycloak ID
             savedUser.linkWithKeycloak(keycloakId);
-            
+            log.debug("User linked with Keycloak ID: {}", savedUser);
             // Update user with Keycloak ID
             savedUser = userRepository.save(savedUser);
-            
-            log.info("Successfully registered user: {} with Keycloak ID: {}", 
-                command.username(), keycloakId);
-            
+
+            log.info("Successfully registered user: {} with Keycloak ID: {}",
+                    command.username(), keycloakId);
+
             return savedUser;
-            
+
         } catch (Exception e) {
             log.error("Failed to create user in Keycloak, rolling back", e);
             throw new RuntimeException("Failed to register user in authentication system", e);
         }
     }
-    
+
     /**
      * Use Case: Get user by ID
      */
     @Transactional(readOnly = true)
     public User getUserById(UserQuery query) {
         log.debug("Fetching user by ID: {}", query.userId());
-        
+
         return userRepository.findById(query.userId())
-            .orElseThrow(() -> new ResourceNotFoundException("User", query.userId().toString()));
+                .orElseThrow(() -> new ResourceNotFoundException("User", query.userId().toString()));
     }
-    
+
     /**
      * Use Case: Get user by username
      */
     @Transactional(readOnly = true)
     public User getUserByUsername(String username) {
         log.debug("Fetching user by username: {}", username);
-        
+
         return userRepository.findByUsername(username)
-            .orElseThrow(() -> new ResourceNotFoundException("User with username: " + username));
+                .orElseThrow(() -> new ResourceNotFoundException("User with username: " + username));
     }
-    
+
     /**
      * Use Case: Get user by Keycloak ID
      */
     @Transactional(readOnly = true)
     public User getUserByKeycloakId(String keycloakId) {
         log.debug("Fetching user by Keycloak ID: {}", keycloakId);
-        
+
         return userRepository.findByKeycloakId(keycloakId)
-            .orElseThrow(() -> new ResourceNotFoundException("User with Keycloak ID: " + keycloakId));
+                .orElseThrow(() -> new ResourceNotFoundException("User with Keycloak ID: " + keycloakId));
     }
 
     /**

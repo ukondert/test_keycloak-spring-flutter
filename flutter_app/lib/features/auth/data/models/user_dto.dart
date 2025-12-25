@@ -32,13 +32,13 @@ class UserDTO extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        username,
-        email,
-        firstName,
-        lastName,
-        keycloakId,
-      ];
+    id,
+    username,
+    email,
+    firstName,
+    lastName,
+    keycloakId,
+  ];
 }
 
 /// Register User Request DTO
@@ -69,17 +69,16 @@ class LoginRequestDTO {
   final String username;
   final String password;
 
-  const LoginRequestDTO({
-    required this.username,
-    required this.password,
-  });
+  const LoginRequestDTO({required this.username, required this.password});
+
+  Map<String, dynamic> toJson() => {'username': username, 'password': password};
 
   Map<String, dynamic> toFormData() => {
-        'grant_type': 'password',
-        'client_id': 'flutter-client',
-        'username': username,
-        'password': password,
-      };
+    'grant_type': 'password',
+    'client_id': 'flutter-client',
+    'username': username,
+    'password': password,
+  };
 }
 
 /// Token Response DTO

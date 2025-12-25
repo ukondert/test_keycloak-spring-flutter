@@ -2,6 +2,7 @@ package com.demo.keycloak.user.adapter.out.keycloak;
 
 import com.demo.keycloak.user.domain.model.User;
 import com.demo.keycloak.user.domain.port.KeycloakUserService;
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,6 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,7 +39,7 @@ public class KeycloakUserServiceAdapter implements KeycloakUserService {
     @Override
     public String createUser(User user, String password) {
         log.info("Creating user in Keycloak: {}", user.getUsername());
-        
+
         UserRepresentation userRep = new UserRepresentation();
         userRep.setUsername(user.getUsername());
         userRep.setEmail(user.getEmail().getValue());
@@ -47,32 +47,65 @@ public class KeycloakUserServiceAdapter implements KeycloakUserService {
         userRep.setLastName(user.getLastName());
         userRep.setEnabled(true);
         userRep.setEmailVerified(true);
-        
-        // Use standard "user" role
-        userRep.setRealmRoles(Collections.singletonList("user"));
 
+        log.debug("UserRepresentation values - Username: {}, Email: {}, FirstName: {}, LastName: {}",
+                userRep.getUsername(), userRep.getEmail(), userRep.getFirstName(), userRep.getLastName());
+        log.debug("Keycloak: {}", keycloak);
+        log.debug("Realm: {}", realm);
+        log.debug("Server URL: {}", serverUrl);
         UsersResource usersResource = keycloak.realm(realm).users();
-        Response response = usersResource.create(userRep);
-        
-        if (response.getStatus() != 201) {
-            log.error("Failed to create user in Keycloak. Status: {}, Error: {}", 
-                response.getStatus(), response.readEntity(String.class));
-            throw new RuntimeException("Failed to create user in Keycloak");
-        }
+        log.debug("UsersResource: {}", usersResource);
+        try {
+            log.debug("Calling Keycloak API (usersResource.create)...");
+            Response response = usersResource.create(userRep);
+            int status = response.getStatus();
+            log.debug("Keycloak Response Status: {}", status);
 
-        // Extract ID from Location header or find by username
-        String location = response.getHeaderString("Location");
-        String keycloakId;
-        if (location != null) {
-            keycloakId = location.substring(location.lastIndexOf("/") + 1);
-        } else {
-            keycloakId = usersResource.search(user.getUsername()).get(0).getId();
-        }
+            if (status < 200 || status >= 300) {
+                String errorEntity = "N/A";
+                try {
+                    errorEntity = response.readEntity(String.class);
+                } catch (Exception e) {
+                    log.warn("Could not read error entity: {}", e.getMessage());
+                }
+                log.error("Failed to create user in Keycloak. Status: {}, Error: {}",
+                        status, errorEntity);
+                throw new RuntimeException("Keycloak API error: status=" + status + ", body=" + errorEntity);
+            }
 
-        // Set password separately
-        resetPassword(keycloakId, password);
-        
-        return keycloakId;
+            String location = response.getHeaderString("Location");
+            String keycloakId = (location != null)
+                    ? location.substring(location.lastIndexOf("/") + 1)
+                    : usersResource.search(user.getUsername()).get(0).getId();
+
+            resetPassword(keycloakId, password);
+            return keycloakId;
+        } catch (Throwable t) {
+            log.error("EXCEPTION in Keycloak adapter ({}): {}", t.getClass().getSimpleName(), t.getMessage());
+
+            // Handle wrapped exceptions (like ProcessingException wrapping
+            // BadRequestException)
+            Throwable cause = t.getCause();
+            if (cause != null) {
+                log.error("  Caused by ({}): {}", cause.getClass().getSimpleName(), cause.getMessage());
+                if (cause instanceof WebApplicationException we) {
+                    try {
+                        String errorBody = we.getResponse().readEntity(String.class);
+                        log.error("  Detailed Error-Body from Cause: {}", errorBody);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+
+            if (t instanceof WebApplicationException we) {
+                try {
+                    String errorBody = we.getResponse().readEntity(String.class);
+                    log.error("  WebApplicationException body: {}", errorBody);
+                } catch (Exception ignored) {
+                }
+            }
+            throw new RuntimeException("Keycloak integration failed", t);
+        }
     }
 
     @Override
@@ -92,7 +125,7 @@ public class KeycloakUserServiceAdapter implements KeycloakUserService {
     @Override
     public AccessTokenResponse authenticate(String username, String password) {
         log.info("Authenticating user in Keycloak: {}", username);
-        
+
         try (Keycloak userKeycloak = KeycloakBuilder.builder()
                 .serverUrl(serverUrl) // serverUrl is available in this class
                 .realm(realm)
@@ -101,7 +134,7 @@ public class KeycloakUserServiceAdapter implements KeycloakUserService {
                 .username(username)
                 .password(password)
                 .build()) {
-            
+
             return userKeycloak.tokenManager().getAccessToken();
         } catch (Exception e) {
             log.error("Authentication failed for user: {}", username, e);

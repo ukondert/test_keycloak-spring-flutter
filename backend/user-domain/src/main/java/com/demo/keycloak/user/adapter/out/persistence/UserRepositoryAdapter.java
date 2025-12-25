@@ -31,10 +31,10 @@ public class UserRepositoryAdapter implements UserRepository {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .keycloakId(user.getKeycloakId())
-                .createdAt(LocalDateTime.now()) // Note: In reality, we should handle this via @CreatedDate
+                .createdAt(user.getCreatedAt())
                 .updatedAt(LocalDateTime.now())
                 .build();
-        
+
         UserJpaEntity savedEntity = springDataUserRepository.save(entity);
         return mapToDomain(savedEntity);
     }
@@ -80,7 +80,8 @@ public class UserRepositoryAdapter implements UserRepository {
                 Email.of(entity.getEmail()),
                 entity.getFirstName(),
                 entity.getLastName(),
-                entity.getKeycloakId()
-        );
+                entity.getKeycloakId(),
+                entity.getCreatedAt(),
+                entity.getUpdatedAt());
     }
 }

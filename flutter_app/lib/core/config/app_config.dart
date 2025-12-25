@@ -30,6 +30,7 @@ class AppConfig {
 
   // Endpoints
   static String get registerEndpoint => '$apiBasePath/users/register';
+  static String get loginEndpoint => '$apiBasePath/users/login';
   static String get currentUserEndpoint => '$apiBasePath/users/me';
   static String getUserEndpoint(String id) => '$apiBasePath/users/$id';
 

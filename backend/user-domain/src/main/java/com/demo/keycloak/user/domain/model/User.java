@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 /**
  * User Aggregate Root - Rich Domain Model
  * 
@@ -15,16 +17,18 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User {
-    
+
     private final UserId id;
     private String username;
     private Email email;
     private String firstName;
     private String lastName;
     private String keycloakId;
-    
+    private final LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
     /**
-     * Factory method to create a new User
+     * Factory method to create an existing User (e.g. from persistence)
      */
     public static User create(
             UserId id,
@@ -32,15 +36,17 @@ public class User {
             Email email,
             String firstName,
             String lastName,
-            String keycloakId) {
-        
+            String keycloakId,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt) {
+
         validateUsername(username);
         validateName(firstName, "First name");
         validateName(lastName, "Last name");
-        
-        return new User(id, username, email, firstName, lastName, keycloakId);
+
+        return new User(id, username, email, firstName, lastName, keycloakId, createdAt, updatedAt);
     }
-    
+
     /**
      * Factory method to create a user without ID (for new registrations)
      */
@@ -49,17 +55,19 @@ public class User {
             Email email,
             String firstName,
             String lastName) {
-        
+
+        LocalDateTime now = LocalDateTime.now();
         return create(
-            UserId.generate(),
-            username,
-            email,
-            firstName,
-            lastName,
-            null
-        );
+                UserId.generate(),
+                username,
+                email,
+                firstName,
+                lastName,
+                null,
+                now,
+                now);
     }
-    
+
     /**
      * Business method to link user with Keycloak
      */
@@ -72,35 +80,36 @@ public class User {
         }
         this.keycloakId = keycloakId;
     }
-    
+
     /**
      * Business method to check if user is linked with Keycloak
      */
     public boolean isLinkedWithKeycloak() {
         return keycloakId != null && !keycloakId.isBlank();
     }
-    
+
     /**
      * Business method to update profile information
      */
     public void updateProfile(String firstName, String lastName, Email email) {
         validateName(firstName, "First name");
         validateName(lastName, "Last name");
-        
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
-    
+
     /**
      * Get full name of the user
      */
     public String getFullName() {
         return firstName + " " + lastName;
     }
-    
+
     /**
-     * Validation: Username must be 3-50 characters, alphanumeric with underscores/hyphens
+     * Validation: Username must be 3-50 characters, alphanumeric with
+     * underscores/hyphens
      */
     private static void validateUsername(String username) {
         if (username == null || username.isBlank()) {
@@ -110,10 +119,11 @@ public class User {
             throw new IllegalArgumentException("Username must be between 3 and 50 characters");
         }
         if (!username.matches("^[a-zA-Z0-9_-]+$")) {
-            throw new IllegalArgumentException("Username can only contain alphanumeric characters, underscores, and hyphens");
+            throw new IllegalArgumentException(
+                    "Username can only contain alphanumeric characters, underscores, and hyphens");
         }
     }
-    
+
     /**
      * Validation: Names must be 1-100 characters
      */

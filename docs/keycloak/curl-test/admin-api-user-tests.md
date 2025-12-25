@@ -104,3 +104,21 @@ curl -X POST http://localhost:8080/realms/demo-realm/protocol/openid-connect/tok
   -d "password=Password123!" \
   -d "grant_type=password"
 ```
+
+## Aufruf über Spring Boot Backend
+
+### Test-Ergebnis:
+Der Login-Aufruf funktioniert jetzt einwandfrei:
+
+```powershell
+curl -X POST http://localhost:8090/api/v1/users/login `
+  -H "Content-Type: application/json" `
+  -d '{
+    "username": "curltestuser",
+    "password": "Password123!"
+  }'
+```
+
+**Antwort vom Server (gekürzt):**
+
+`{"access_token":"eyJhbG...","token_type":"Bearer", ...}`

@@ -14,14 +14,14 @@ class AuthRepository {
   AuthRepository({
     required AppHttpClient httpClient,
     required SecureStorageService storage,
-  })  : _httpClient = httpClient,
-        _storage = storage,
-        _keycloakDio = Dio(BaseOptions(
-          baseUrl: AppConfig.keycloakUrl,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        ));
+  }) : _httpClient = httpClient,
+       _storage = storage,
+       _keycloakDio = Dio(
+         BaseOptions(
+           baseUrl: AppConfig.keycloakUrl,
+           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+         ),
+       );
 
   /// Register a new user
   Future<UserDTO> register(RegisterUserRequestDTO request) async {
@@ -42,15 +42,12 @@ class AuthRepository {
     }
   }
 
-  /// Login with username and password using Keycloak direct grant
+  /// Login with username and password using Backend Proxy
   Future<TokenResponseDTO> login(LoginRequestDTO request) async {
     try {
-      final response = await _keycloakDio.post(
-        AppConfig.keycloakTokenEndpoint,
-        data: request.toFormData(),
-        options: Options(
-          contentType: Headers.formUrlEncodedContentType,
-        ),
+      final response = await _httpClient.post(
+        AppConfig.loginEndpoint,
+        data: request.toJson(),
       );
 
       if (response.data == null) {
@@ -138,9 +135,7 @@ class AuthRepository {
           'client_id': AppConfig.keycloakClientId,
           'refresh_token': refreshToken,
         },
-        options: Options(
-          contentType: Headers.formUrlEncodedContentType,
-        ),
+        options: Options(contentType: Headers.formUrlEncodedContentType),
       );
 
       final tokenResponse = TokenResponseDTO.fromJson(

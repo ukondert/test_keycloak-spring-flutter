@@ -1,0 +1,23 @@
+keycloak-demo-server  | Updating the configuration and installing your custom providers, if any. Please wait.
+keycloak-demo-server  | 2025-12-19 07:43:40,000 INFO  [io.quarkus.deployment.QuarkusAugmentor] (main) Quarkus augmentation completed in 16236ms
+keycloak-demo-server  | 2025-12-19 07:43:42,027 INFO  [org.keycloak.quarkus.runtime.hostname.DefaultHostnameProvider] (main) Hostname settings: Base URL: <unset>, Hostname: localhost, Strict HTTPS: false, Path: <request>, Strict BackChannel: false, Admin URL: <unset>, Admin: <request>, Port: -1, Proxied: false
+keycloak-demo-server  | 2025-12-19 07:43:44,583 WARN  [io.quarkus.agroal.runtime.DataSources] (main) Datasource <default> enables XA but transaction recovery is not enabled. Please enable transaction recovery by setting quarkus.transaction-manager.enable-recovery=true, otherwise data may be lost if the application is terminated abruptly
+keycloak-demo-server  | 2025-12-19 07:43:45,801 WARN  [org.infinispan.PERSISTENCE] (keycloak-cache-init) ISPN000554: jboss-marshalling is deprecated and planned for removal
+keycloak-demo-server  | 2025-12-19 07:43:45,957 WARN  [org.infinispan.CONFIG] (keycloak-cache-init) ISPN000569: Unable to persist Infinispan internal caches as no global state enabled
+keycloak-demo-server  | 2025-12-19 07:43:46,088 INFO  [org.infinispan.CONTAINER] (keycloak-cache-init) ISPN000556: Starting user marshaller 'org.infinispan.jboss.marshalling.core.JBossUserMarshaller'
+keycloak-demo-server  | 2025-12-19 07:43:46,980 INFO  [org.keycloak.broker.provider.AbstractIdentityProviderMapper] (main) Registering class org.keycloak.broker.provider.mappersync.ConfigSyncEventListener
+keycloak-demo-server  | 2025-12-19 07:43:52,497 INFO  [org.keycloak.quarkus.runtime.storage.legacy.liquibase.QuarkusJpaUpdaterProvider] (main) Initializing database schema. Using changelog META-INF/jpa-changelog-master.xml
+keycloak-demo-server  | 
+keycloak-demo-server  | UPDATE SUMMARY
+keycloak-demo-server  | Run:                        117
+keycloak-demo-server  | Previously run:               0
+keycloak-demo-server  | Filtered out:                 0
+keycloak-demo-server  | -------------------------------
+keycloak-demo-server  | Total change sets:          117
+keycloak-demo-server  | 
+keycloak-demo-server  | 2025-12-19 07:44:01,168 INFO  [org.keycloak.connections.infinispan.DefaultInfinispanConnectionProviderFactory] (main) Node name: node_645695, Site name: null
+keycloak-demo-server  | 2025-12-19 07:44:01,485 INFO  [org.keycloak.services] (main) KC-SERVICES0050: Initializing master realm
+keycloak-demo-server  | 2025-12-19 07:44:04,619 INFO  [org.keycloak.exportimport.singlefile.SingleFileImportProvider] (main) Full importing from file /opt/keycloak/bin/../data/import/realm-export.json
+keycloak-demo-server  | 2025-12-19 07:44:07,197 ERROR [org.keycloak.quarkus.runtime.cli.ExecutionExceptionHandler] (main) ERROR: Failed to start server in (development) mode
+keycloak-demo-server  | 2025-12-19 07:44:07,198 ERROR [org.keycloak.quarkus.runtime.cli.ExecutionExceptionHandler] (main) ERROR: Cannot invoke "org.keycloak.models.AuthenticationFlowModel.getId()" because "flow" is null
+keycloak-demo-server  | 2025-12-19 07:44:07,198 ERROR [org.keycloak.quarkus.runtime.cli.ExecutionExceptionHandler] (main) For more details run the same command passing the '--verbose' option. Also you can use '--help' to see the details about the usage of the particular command.
